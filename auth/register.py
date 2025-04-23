@@ -70,7 +70,6 @@ def main():
 
                     st.success("Registro exitoso. Ahora puedes iniciar sesión.")
                     st.session_state.view = "login"
-                    st.rerun()
 
     with col2:
         imagen = Image.open('./images/registro.png')
