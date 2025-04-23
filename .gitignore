@@ -1,0 +1,41 @@
+# Python bytecode files
+*.pyc
+*.pyo
+__pycache__/
+
+# Virtual environment
+venv/
+.env
+.env.*
+
+# SQLAlchemy database files (if using SQLite for local development)
+*.sqlite3
+*.db
+
+# Streamlit cache and logs
+.streamlit/
+*.log
+
+# Build and distribution directories
+build/
+dist/
+*.egg-info/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# IDE-specific files
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.swp
+*.bak
+*.orig
+
+/alembic.ini
+/migrations/
+/contenido/
+/ndasg/
