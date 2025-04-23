@@ -1,4 +1,5 @@
 import streamlit as st
+from PIL import Image
 from auth import login, register
 from admin import panel as admin_panel, gestion_usuarios, gestion_contenido
 from estudiantes import inicio as estudiante_inicio, perfil as estudiante_perfil
@@ -6,6 +7,14 @@ from estudiantes import materia_analisis_vulnerabilidades, materia_conmutadores_
 from models.base import Base
 from db import engine
 import logging
+
+# Configuración de la página
+st.set_page_config(
+    page_title='Repo LIDTS',
+    page_icon=Image.open('./images/logo.png'),
+    layout='wide',
+    initial_sidebar_state='auto',
+)
 
 logging.getLogger('sqlalchemy.engine').setLevel(logging.WARNING)
 # Inicializar el estado de la sesión si no existe
