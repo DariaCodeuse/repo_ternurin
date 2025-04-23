@@ -12,7 +12,7 @@ class Contenido(Base):
     Autor = Column(Text)
     Descripcion = Column(Text)
     TipoContenido = Column(String(50), nullable=False)
-    Keywords = Column(Text)
+    Materia = Column(Text)
     Vistas = Column(Integer, default=0)
     Estado = Column(String(20), nullable=False)
     Formato = Column(String(50), nullable=False)
