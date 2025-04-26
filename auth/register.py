@@ -1,8 +1,7 @@
 import streamlit as st
 from PIL import Image
-from werkzeug.security import generate_password_hash
 from db import get_db
-from models import Usuario, Estudiantes  # Asegúrate que estos estén bien importados
+from utils import registrar_estudiante
 
 # Página de Registro
 def main():
@@ -38,38 +37,14 @@ def main():
             confirmar_contraseña = col_pass2.text_input("Confirmar Contraseña:", type="password")
 
             if st.form_submit_button("Registrar Usuario", use_container_width=True):
-                campos_obligatorios = [nombre, apellido_paterno, apellido_materno, correo, matricula, contraseña, confirmar_contraseña, carrera]
-                if not all(campos_obligatorios):
-                    st.error("Todos los campos son obligatorios.")
-                elif contraseña != confirmar_contraseña:
-                    st.error("Las contraseñas no coinciden.")
-                elif db.query(Usuario).filter_by(Email=correo).first():
-                    st.error("El correo ya está registrado.")
-                elif db.query(Estudiantes).filter_by(Matricula=matricula).first():
-                    st.error("La matrícula ya está en uso.")
+                success, message = registrar_estudiante(
+                    db, nombre,apellido_paterno, apellido_materno, correo, matricula, semestre, carrera, contraseña, confirmar_contraseña, rol="usuario"
+                )
+
+                if success:
+                    st.success(message)
                 else:
-                    nuevo_usuario = Usuario(
-                        Nombre=nombre,
-                        A_Paterno=apellido_paterno,
-                        A_Materno=apellido_materno,
-                        Email=correo,
-                        Contraseña=generate_password_hash(contraseña),
-                        Rol="usuario"
-                    )
-                    db.add(nuevo_usuario)
-                    db.commit()
-
-                    nuevo_estudiante = Estudiantes(
-                        UsuarioID=nuevo_usuario.UsuarioID,
-                        Matricula=matricula,
-                        Semestre=semestre,
-                        Carrera=carrera
-                    )
-                    db.add(nuevo_estudiante)
-                    db.commit()
-
-                    st.success("Registro exitoso. Ahora puedes iniciar sesión.")
-                    st.session_state.view = "login"
+                    st.error(message)
 
     with col2:
         imagen = Image.open('./images/registro.png')
