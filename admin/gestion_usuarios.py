@@ -70,6 +70,7 @@ def main():
                 st.rerun()
 
     # Añadir nuevo usuario
+    st.markdown("---")
     st.subheader("➕ Registro de Usuario")
     registro_type = st.radio("¿Qué tipo de usuario será?:", ["Administrador", "Usuario"], horizontal=True)
 
@@ -136,6 +137,53 @@ def main():
                     st.success(message)
                 else:
                     st.error(message)
+    
+    # Editar usuario
+    st.markdown("---")
+    st.subheader("✏️ Editar Usuario")
+    usuario_seleccionado = st.selectbox("Selecciona un usuario para editar", [u.Nombre for u in usuarios])
+    usuario_a_editar = next(u for u in usuarios if u.Nombre == usuario_seleccionado)
+    rol = usuario_a_editar.Rol
+
+    st.write(f'**Rol actual:** {rol}')
+    with st.form(key="editar_usuario"):
+        colNombre, colAPaterno, colAMaterno = st.columns(3)
+        with colNombre:
+            nombre = st.text_input("Nombre", usuario_a_editar.Nombre)
+        with colAPaterno:  
+            apellido_paterno = st.text_input("Apellido Paterno", usuario_a_editar.A_Paterno)
+        with colAMaterno:
+            apellido_materno = st.text_input("Apellido Materno", usuario_a_editar.A_Materno)
+        correo = st.text_input("Correo Electrónico", usuario_a_editar.Email)
+
+        # Mostrar campos de estudiante si el usuario es estudiante
+        if rol == "usuario":
+            estudiante = db.query(Estudiantes).filter_by(UsuarioID=usuario_a_editar.UsuarioID).first()
+
+            colMatricula, colSemestre, colCarrera = st.columns([1, 1, 2], vertical_alignment="center")
+            with colMatricula:
+                matricula = st.text_input("Matrícula", estudiante.Matricula)
+            with colSemestre:
+                semestre = st.number_input("Semestre", value=estudiante.Semestre)
+            with colCarrera:
+                carrera = st.selectbox("Carrera:", ["Ingeniería en Desarrollo y Tecnologías de Software", "Licenciatura en Sistemas Computacionales"])
+
+        if st.form_submit_button("Guardar Cambios", use_container_width=True):
+            usuario_a_editar.Nombre = nombre
+            usuario_a_editar.A_Paterno = apellido_paterno
+            usuario_a_editar.A_Materno = apellido_materno
+            usuario_a_editar.Email = correo
+
+            if rol == "usuario":
+                estudiante.Matricula = matricula
+                estudiante.Semestre = semestre
+                estudiante.Carrera = carrera
+
+
+            db.commit()
+            st.success("Usuario actualizado correctamente.")
+        else:
+            st.warning("No se realizaron cambios.")
 
 if __name__ == "__main__":
     main()
