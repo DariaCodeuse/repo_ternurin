@@ -1,5 +1,6 @@
 from .registros_db import registrar_administrador, registrar_estudiante
-from .contenidos_db import contar_registros, obtener_ultimos_contenidos, extraer_portada_pdf, construir_ruta_pdf, visualizar_pdf, descargar_pdf, obtener_contenidos, filtrar_contenidos, mostrar_contenidos
+from .contenidos_db import contar_registros, obtener_ultimos_contenidos, extraer_portada_pdf, construir_ruta_archivo, visualizar_pdf, descargar_pdf, obtener_contenidos, filtrar_contenidos, mostrar_contenidos
+from .registro_contenido import formulario_tesis, formulario_libro, formulario_revista, formulario_video, formulario_podcast, agregar_contenido, ui_registro_contenido
 
 __all__ = [
     'registrar_administrador',
@@ -7,10 +8,17 @@ __all__ = [
     'contar_registros',
     'obtener_ultimos_contenidos',
     'extraer_portada_pdf',
-    'construir_ruta_pdf',
+    'construir_ruta_archivo',
     'visualizar_pdf',
     'descargar_pdf',
     'obtener_contenidos',
     'filtrar_contenidos',
-    'mostrar_contenidos'
+    'mostrar_contenidos',
+    'ui_registro_contenido',
+    'formulario_libro',
+    'formulario_revista',
+    'formulario_tesis',
+    'formulario_video',
+    'formulario_podcast',
+    'agregar_contenido'
 ]
