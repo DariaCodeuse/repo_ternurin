@@ -2,9 +2,7 @@ import streamlit as st
 from sqlalchemy.orm import Session
 from db import get_db
 from models import Contenido, Usuario, Libros, Revistas, Tesis
-from utils.consultas import (
-    contar_registros, obtener_ultimos_contenidos
-)
+from utils import contar_registros, obtener_ultimos_contenidos
 
 def main():
     st.title("🏠 Panel de Administrador")
