@@ -29,7 +29,7 @@ def extraer_portada_pdf(ruta_pdf):
         st.error(f"Error al extraer la portada de {ruta_pdf}: {e}")
         return None
 
-def construir_ruta_pdf(titulo, tipo_contenido):
+def construir_ruta_archivo(titulo, tipo_contenido):
     titulo = titulo.replace(" ", "_")
     return f"./files/{tipo_contenido}/{titulo}.pdf".lower()
 
@@ -67,12 +67,12 @@ def filtrar_contenidos(contenidos, filtro_tipo, filtro_keywords):
 
     if filtro_keywords != "Todos":
         filtro_keywords_lower = filtro_keywords.lower()
-        contenidos_filtrados = [c for c in contenidos_filtrados if filtro_keywords_lower in c.Keywords.lower()]
+        contenidos_filtrados = [c for c in contenidos_filtrados if filtro_keywords_lower in c.Materia.lower()]
     
     return contenidos_filtrados
 
 # Función para mostrar los contenidos
-def mostrar_contenidos(db: Session, contenidos_filtrados):
+def mostrar_contenidos(db, contenidos_filtrados):
     for contenido in contenidos_filtrados:
         with st.expander(f" {contenido.Titulo} ({contenido.TipoContenido})"):
             colData, colImg = st.columns([2, 1])
@@ -85,10 +85,14 @@ def mostrar_contenidos(db: Session, contenidos_filtrados):
                 st.write(f"**Fecha de Subida:** {contenido.FechaSubida}")
                 st.write(f"**Descripción:** {contenido.Descripcion}")
                 
-                st.button("❌ Eliminar contenido", key=f"eliminar_{contenido.ContenidoID}", on_click=eliminar_contenido, args=(contenido, db), use_container_width=True)
+                if st.button("❌ Eliminar contenido", key=f"eliminar_{contenido.ContenidoID}",use_container_width=True):
+                    db.delete(contenido)
+                    db.commit()
+                    st.warning("Contenido eliminado.")
+                    st.rerun()
 
             with colImg:
-                ruta_pdf = construir_ruta_pdf(contenido.Titulo, contenido.TipoContenido)
+                ruta_pdf = construir_ruta_archivo(contenido.Titulo, contenido.TipoContenido)
                 portada = extraer_portada_pdf(ruta_pdf)
                 if portada:
                     st.image(portada, caption=f"{contenido.Titulo}", use_container_width=True)
@@ -100,11 +104,6 @@ def mostrar_contenidos(db: Session, contenidos_filtrados):
                 
             # st.button("📄 Ver PDF", key=f"ver_pdf_{contenido.ContenidoID}", on_click=visualizar_pdf, args=(ruta_pdf,))
 
-# Función para eliminar un contenido
-def eliminar_contenido(contenido, db: Session):
-    db.delete(contenido)
-    db.commit()
-    st.warning("Contenido eliminado.")
-    st.rerun()
+
 
 

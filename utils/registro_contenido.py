@@ -5,7 +5,7 @@ from utils import construir_ruta_archivo
 from sqlalchemy.orm import Session
 import os
 
-def ui_registro_contenido(tipos_contenido, palabras_clave, formatos):
+def ui_registro_contenido(tipos_contenido, materia, formatos):
     st.subheader("➕ Agregar Nuevo Contenido")
     
     colTipo, colTitulo = st.columns([1, 2])
@@ -16,7 +16,7 @@ def ui_registro_contenido(tipos_contenido, palabras_clave, formatos):
 
     autor = st.text_area("Autor:", placeholder="Nombre del autor o autores")
     descripcion = st.text_area("Descripción:", placeholder="Descripción del contenido")
-    keywords = st.selectbox("Palabras clave: ", palabras_clave, index=0, placeholder="Selecciona una palabra clave")
+    materia= st.selectbox("Materia:", materia, index=0)
 
     colFormato, colEstado = st.columns([1, 1])
     with colFormato:
@@ -26,16 +26,17 @@ def ui_registro_contenido(tipos_contenido, palabras_clave, formatos):
 
     # Variables específicas por tipo de contenido
     tipo_contenido_especifico = {}
-    if tipo_contenido == "Libro":
+    if tipo_contenido == "Libros":
         tipo_contenido_especifico = formulario_libro()
-    elif tipo_contenido == "Revista":
+    elif tipo_contenido == "Revistas":
         tipo_contenido_especifico = formulario_revista()
     elif tipo_contenido == "Tesis":
         tipo_contenido_especifico = formulario_tesis()
-    elif tipo_contenido == "Video":
+    elif tipo_contenido == "Videos":
         tipo_contenido_especifico = formulario_video()
-    elif tipo_contenido == "Podcast":
+    elif tipo_contenido == "Podcasts":
         tipo_contenido_especifico = formulario_podcast()
+        print(tipo_contenido_especifico)
 
     archivo = st.file_uploader("Sube el archivo del contenido:", type=None)
 
@@ -44,7 +45,7 @@ def ui_registro_contenido(tipos_contenido, palabras_clave, formatos):
         "titulo": titulo,
         "autor": autor,
         "descripcion": descripcion,
-        "keywords": keywords,
+        "materia": materia,
         "formato": formato,
         "estado": estado,
         "archivo": archivo,
@@ -107,16 +108,16 @@ def formulario_podcast():
 
     return {"tema": tema, "duracion": duracion, "episodios": episodios, "locutor": locutor}
 
-def agregar_contenido(db: Session, contenido_data: dict):
+def agregar_contenido(db,contenido_data: dict):
     tipo_contenido = contenido_data['tipo_contenido']
     titulo = contenido_data['titulo']
     autor = contenido_data['autor']
     descripcion = contenido_data['descripcion']
-    keywords = contenido_data['keywords']
+    materia = contenido_data['materia']
     formato = contenido_data['formato']
     estado = contenido_data['estado']
     archivo = contenido_data['archivo']
-
+          
     # Validación
     if not titulo or not descripcion or not formato or not archivo:
         st.error("Todos los campos generales y el archivo son obligatorios.")
@@ -128,7 +129,7 @@ def agregar_contenido(db: Session, contenido_data: dict):
         Autor=autor,
         Descripcion=descripcion,
         TipoContenido=tipo_contenido,
-        Keywords=keywords,
+        Materia=materia,
         Vistas=0,
         Estado=estado,
         Formato=formato,
@@ -152,15 +153,15 @@ def agregar_contenido(db: Session, contenido_data: dict):
     # Relacionar con información específica de cada tipo de contenido
     contenido_id = nuevo_contenido.ContenidoID
 
-    if tipo_contenido == "Libro":
+    if tipo_contenido == "Libros":
         db.add(Libros(ContenidoID=contenido_id, isbn=contenido_data["isbn"], Editorial=contenido_data["editorial"], AñoPublicacion=contenido_data["año_publicacion"], Edicion=contenido_data["edicion"]))
-    elif tipo_contenido == "Revista":
+    elif tipo_contenido == "Revistas":
         db.add(Revistas(ContenidoID=contenido_id, Volumen=contenido_data["volumen"], Numero=contenido_data["numero"]))
     elif tipo_contenido == "Tesis":
         db.add(Tesis(ContenidoID=contenido_id, Asesor=contenido_data["asesor"], AñoDefensa=contenido_data["año_defensa"]))
-    elif tipo_contenido == "Video":
+    elif tipo_contenido == "Videos":
         db.add(Videos(ContenidoID=contenido_id, Duracion=contenido_data["duracion"], Tamaño=contenido_data["tamaño"], Resolucion=contenido_data["resolucion"]))
-    elif tipo_contenido == "Podcast":
+    elif tipo_contenido == "Podcasts":
         db.add(Podcasts(ContenidoID=contenido_id, Duracion=contenido_data["duracion"], Locutor=contenido_data["locutor"], Tema=contenido_data["tema"], Episodios=contenido_data["episodios"]))
 
     db.commit()
