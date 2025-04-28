@@ -35,10 +35,10 @@ st.sidebar.title("📚 Repositorio Ternurin")
 
 if st.session_state.role is None:
     # Barra lateral para usuarios no autenticados
-    auth_selection = st.sidebar.radio("Autenticación", ["Iniciar Sesión", "Registrarse"])
-    if auth_selection == "Iniciar Sesión":
+    auth_selection = st.sidebar.radio("Autenticación", ["👤Iniciar Sesión", "📝Registrarse"])
+    if auth_selection == "👤Iniciar Sesión":
         st.session_state.view = "login"
-    elif auth_selection == "Registrarse":
+    elif auth_selection == "📝Registrarse":
         st.session_state.view = "register"  # Cambiamos la vista a "register"
 
     if st.session_state.view == "login":
@@ -50,7 +50,8 @@ elif st.session_state.role == "Administrador":
     # Barra lateral para administradores
     st.sidebar.subheader("Administrador")
     admin_page = st.sidebar.radio("Navegación", ["Panel", "Gestión de Usuarios", "Gestión de Contenido"])
-    st.sidebar.button("Cerrar Sesión", on_click=logout)
+    st.sidebar.markdown("---")
+    st.sidebar.button("Cerrar Sesión", on_click=logout, use_container_width=True)
 
     if admin_page == "Panel":
         admin_panel.main()
@@ -73,6 +74,7 @@ elif st.session_state.role == "Estudiante":
          "Sistemas Operativos",
          "Perfil"]
     )
+    st.sidebar.markdown("---")  
     st.sidebar.button("Cerrar Sesión", on_click=logout)
 
     if estudiante_page == "Inicio":
