@@ -25,7 +25,7 @@ def mostrar_contenido_materia(db, Contenido, materia):
         cols = st.columns(4)
         for idx, item in enumerate(lista):
             with cols[idx % 4]:
-                with st.container(border=True, height=720):
+                with st.container(border=True, height=620):
                     st.markdown("""<div style="display:flex;flex-direction:column;align-items:center;">""", unsafe_allow_html=True)
 
                     ruta_pdf = construir_ruta_archivo(item.Titulo, item.TipoContenido)
@@ -67,28 +67,29 @@ def mostrar_contenido_materia(db, Contenido, materia):
                         st.rerun()
 
     def mostrar_tarjetas_audios(lista):
+        # Definimos las columnas para mostrar los contenidos de forma ordenada
         cols = st.columns(2)
         for idx, item in enumerate(lista):
-            with cols[idx % 2]:
-                with st.container(border=True, height=350):
-                    st.markdown(f"### {item.Titulo}")
-                    st.markdown(f"**Autor:** {item.Autor}")
-                    st.markdown(f"**Materia:** {item.Materia}")
+            with cols[idx % 2]:  # Alternamos las columnas para no sobrecargar una sola columna
+                with st.container(border=True):
+                    # Usamos un contenedor para mantener la estructura limpia
+                    st.markdown(f"####  🎧 {item.Titulo}", unsafe_allow_html=True)
+                    st.markdown(f"**Descripción:** {item.Descripcion}")
 
-                    ruta_audio = construir_ruta_archivo(item.Titulo, item.TipoContenido)
-                    st.write(ruta_audio)
-                    
-                    if os.path.exists(ruta_audio):
-                        # Si existe el audio, lo carga y reproduce
+                    # Dividimos el espacio entre la imagen y los datos
+                    colImg, colData = st.columns([1, 3])
+                    with colImg:
+                        # Imagen de placeholder o decorativa
+                        ruta_audio = f"./files/{item.TipoContenido.lower()}/{item.Titulo.replace(' ', '_')}.mp3"  # Corrección en el nombre del archivo
+                        if os.path.exists(ruta_audio):
+                            st.image("./images/placeholder_audio.png", width=100)                        
+
+                    with colData:
                         audio_bytes = open(ruta_audio, "rb").read()
+                        st.markdown(f"**Autor:** {item.Autor}")
+                        st.markdown(f"**Materia:** {item.Materia}")
                         st.audio(audio_bytes, format='audio/mp3')
-                    else:
-                        # Si no hay audio, solo muestra un mensaje simple (sin imagen para evitar errores)
-                        st.info("Audio no disponible.")
 
-                    if st.button("Ver más", key=f"ver_audio_{item.ContenidoID}"):
-                        st.session_state["ver_contenido"] = item.ContenidoID
-                        st.rerun()
 
     # Mostrar secciones
     if documentos:
