@@ -14,7 +14,7 @@ def main():
     contenidos = obtener_contenidos(db)
 
     tipos_contenido = ["Libros", "Revistas", "Tesis", "Videos", "Podcasts"]
-    materia = ["Análisis de Vulverabilidades", "Conmutadores y Redes Inalámbricas ", "Desarrollo de Aplicaciones Web y Móviles", "Inteligencia Artificial", "Seguridad en Cómputo", "Sistemas Operativos"]
+    materia = ["Análisis de Vulnerabilidades", "Conmutadores y Redes Inalámbricas ", "Desarrollo de Aplicaciones Web y Móviles", "Inteligencia Artificial", "Seguridad en Cómputo", "Sistemas Operativos"]
     formatos = ["PDF", "MP4", "MP3", "DOCX", "PPTX"]
 
     # Filtro por tipo de contenido
