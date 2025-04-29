@@ -26,5 +26,6 @@ __all__ = [
     'agregar_contenido',
     'buscador_contenido',
     'mostrar_contenido_reciente',
-    'panel_materias'
+    'panel_materias',
+    "mostrar_contenido_materia"
 ]
