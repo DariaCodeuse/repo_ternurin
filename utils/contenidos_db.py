@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import desc
-from models import Contenido
+from models import Contenido, Libros, Revistas, Tesis, Videos, Podcasts
 import streamlit as st
 import fitz
 import os

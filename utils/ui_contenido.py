@@ -3,8 +3,6 @@ import os
 from utils import construir_ruta_archivo, extraer_portada_pdf
 
 def mostrar_contenido_materia(db, Contenido, materia):
-    st.title(f"📚 Contenido de {materia}")
-
     # Filtrar contenido por materia
     contenidos = db.query(Contenido).filter(Contenido.Materia.ilike(f"%{materia}%")).all()
 
@@ -46,25 +44,19 @@ def mostrar_contenido_materia(db, Contenido, materia):
                     st.markdown("</div>", unsafe_allow_html=True)
 
     def mostrar_tarjetas_videos(lista):
-        cols = st.columns(2)
-        for idx, item in enumerate(lista):
-            with cols[idx % 2]:
-                with st.container(border=True, height=350):
-                    ruta_video = construir_ruta_archivo(item.Titulo, item.TipoContenido)
-                    portada = extraer_portada_pdf(ruta_video)  # O usar miniatura si tienes una para videos
+        for item in lista:
+            with st.container(border=True):
+                col1, col2 = st.columns([2, 3])  # Izquierda: texto, Derecha: video
 
-                    if portada:
-                        st.image(portada, use_container_width=True)
-                    else:
-                        st.image("./images/placeholder_video.png", use_container_width=True)
-
+                with col1:
                     st.markdown(f"### {item.Titulo}")
                     st.markdown(f"**Autor:** {item.Autor}")
                     st.markdown(f"**Materia:** {item.Materia}")
+                    st.markdown(item.Descripcion)
 
-                    if st.button("Ver más", key=f"ver_video_{item.ContenidoID}"):
-                        st.session_state["ver_contenido"] = item.ContenidoID
-                        st.rerun()
+                with col2:
+                    ruta_video = f"./files/{item.TipoContenido}/{item.Titulo.replace(' ', '_')}.{item.Formato}".lower()
+                    st.video(ruta_video)
 
     def mostrar_tarjetas_audios(lista):
         # Definimos las columnas para mostrar los contenidos de forma ordenada
