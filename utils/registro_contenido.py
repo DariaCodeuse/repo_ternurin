@@ -142,7 +142,8 @@ def agregar_contenido(db,contenido_data: dict):
 
     # Guardar archivo localmente
     nombre_archivo = archivo.name
-    ruta_archivo = construir_ruta_archivo(nombre_archivo, tipo_contenido)
+    nombre_formateado = nombre_archivo.replace(" ", "_")
+    ruta_archivo = f"./files/{tipo_contenido}/{nombre_formateado}".lower()
     os.makedirs(os.path.dirname(ruta_archivo), exist_ok=True)
 
     with open(ruta_archivo, "wb") as f:
