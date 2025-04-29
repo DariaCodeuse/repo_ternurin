@@ -4,9 +4,11 @@ from utils import construir_ruta_archivo, extraer_portada_pdf
 
 def mostrar_contenido_reciente(db, Contenido):
     st.subheader("🆕 Contenido Reciente", divider="rainbow")
-    recientes = db.query(Contenido).order_by(Contenido.FechaSubida.desc()).limit(4).all()
+    
+    # Filtrar solo los documentos (por ejemplo, 'PDF', 'Libro', 'Tesis', 'Revista')
+    documentos = db.query(Contenido).filter(Contenido.TipoContenido.in_(['PDF', 'Libro', 'Tesis', 'Revista'])).order_by(Contenido.FechaSubida.desc()).limit(4).all()
 
-    if recientes:
+    if documentos:
         cols = st.columns(4)
 
         st.markdown("""<style>
@@ -16,7 +18,7 @@ def mostrar_contenido_reciente(db, Contenido):
         }
         </style>""", unsafe_allow_html=True)
 
-        for idx, item in enumerate(recientes):
+        for idx, item in enumerate(documentos):
             with cols[idx]:
                 with st.container(border=True, height=700):
                     st.markdown("""<div style="display:flex;flex-direction:column;align-items:center;">""", unsafe_allow_html=True)
