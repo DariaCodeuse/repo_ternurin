@@ -12,7 +12,7 @@ def buscador_contenido(db, Contenido):
         st.subheader("🔎 Resultados de búsqueda")
         resultados = db.query(Contenido).filter(
             (Contenido.Titulo.ilike(f"%{query}%")) |
-            (Contenido.Keywords.ilike(f"%{query}%"))
+            (Contenido.Materia.ilike(f"%{query}%"))
         ).all()
 
         if resultados:
