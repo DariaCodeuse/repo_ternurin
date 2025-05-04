@@ -5,7 +5,7 @@ from models import Contenido
 from utils import mostrar_contenido_materia, obtener_contenidos
 
 def main():
-    st.title("🛡️ Análisis de Vulverabilidades")
+    st.title("🛡️ Análisis de Vulnerabilidades")
     st.info("Listado de recursos para esta materia.")
 
     db: Session = next(get_db())
