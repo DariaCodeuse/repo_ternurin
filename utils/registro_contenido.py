@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 import os
 
 def ui_registro_contenido(tipos_contenido, materia, formatos):
+    st.write("------")
     st.subheader("➕ Agregar Nuevo Contenido")
     
     colTipo, colTitulo = st.columns([1, 2])
