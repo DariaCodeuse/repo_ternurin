@@ -2,7 +2,7 @@ import streamlit as st
 from PIL import Image
 from auth import login, register
 from admin import panel as admin_panel, gestion_usuarios, gestion_contenido
-from estudiantes import inicio as estudiante_inicio, perfil as estudiante_perfil
+from estudiantes import añadir_contenido as estudiante_añadir_contenido, inicio as estudiante_inicio
 from estudiantes import materia_analisis_vulnerabilidades, materia_conmutadores_redes, materia_desarrollo_web_movil, materia_inteligencia_artificial, materia_seguridad_computo, materia_sistemas_operativos
 from models.base import Base
 from db import engine
@@ -72,15 +72,15 @@ elif st.session_state.role == "Estudiante":
          "Inteligencia Artificial",
          "Seguridad en Cómputo",
          "Sistemas Operativos",
-         "Perfil"]
+         "Añadir Contenido",]
     )
     st.sidebar.markdown("---")  
     st.sidebar.button("Cerrar Sesión", on_click=logout)
 
     if estudiante_page == "Inicio":
         estudiante_inicio.main()
-    elif estudiante_page == "Perfil":
-        estudiante_perfil.main()
+    elif estudiante_page == "Añadir Contenido":
+        estudiante_añadir_contenido.main()
     elif estudiante_page == "Análisis de Vulverabilidades":
         materia_analisis_vulnerabilidades.main()
     elif estudiante_page == "Conmutadores y Redes Inalámbricas":
