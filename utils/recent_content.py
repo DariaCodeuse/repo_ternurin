@@ -8,8 +8,6 @@ def mostrar_contenido_reciente(db, Contenido):
     
     # Filtrar solo los documentos (por ejemplo, 'PDF', 'Libro', 'Tesis', 'Revista')
     documentos = db.query(Contenido).filter(Contenido.Formato.in_(["PDF"])).order_by(Contenido.FechaSubida.desc()).limit(4).all()
-    cantidad = db.query(Contenido).filter(Contenido.Formato.in_(["PDF"])).count()
-    st.write(cantidad)
 
     if documentos:
         cols = st.columns(4)
